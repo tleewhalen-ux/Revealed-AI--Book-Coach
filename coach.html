@@ -346,10 +346,19 @@ Rules you always follow:
         })
       });
       const data = await response.json();
-      const reply = (data.content || [])
-        .map(b => b.type === 'text' ? b.text : '')
-        .join('')
-        .trim() || "I'm not sure how to follow that up — could you say it a different way?";
+
+      let reply;
+      if (data.content && data.content.length) {
+        reply = data.content
+          .map(b => b.type === 'text' ? b.text : '')
+          .join('')
+          .trim();
+      } else if (data.error) {
+        const msg = typeof data.error === 'string' ? data.error : (data.error.message || JSON.stringify(data.error));
+        reply = "⚠️ Backend error: " + msg;
+      } else {
+        reply = "⚠️ Unexpected response from server: " + JSON.stringify(data).slice(0, 300);
+      }
 
       setTyping(false);
       addMessage('coach', reply);
@@ -357,7 +366,7 @@ Rules you always follow:
       updateBeam(reply);
     } catch(err){
       setTyping(false);
-      addMessage('coach', "Something went wrong reaching the coach. Try asking again in a moment.");
+      addMessage('coach', "⚠️ Connection error: " + err.message);
       console.error(err);
     } finally {
       sendBtn.disabled = false;
