@@ -16,6 +16,32 @@
 
   *{box-sizing:border-box;}
 
+  /* ---- Light theme override ---- */
+  .sc-root[data-theme="light"]{
+    --ink:#f7f3e8;
+    --ink-2:#eee6d2;
+    --parchment:#211c10;
+    --evidence:#2f6f68;
+    --meaning:#9c6a13;
+    --text-hi:#1c1a13;
+    --text-lo:#615c4a;
+    --line:#d9d0b8;
+  }
+
+  /* ---- Font-size scale: everything below is in em, relative to this ---- */
+  .sc-root[data-fontsize="sm"]{ font-size:14px; }
+  .sc-root[data-fontsize="md"]{ font-size:16px; }
+  .sc-root[data-fontsize="lg"]{ font-size:18px; }
+  .sc-root[data-fontsize="xl"]{ font-size:20px; }
+
+  /* ---- Reading font toggle ---- */
+  .sc-root[data-font="sans"] .sc-title,
+  .sc-root[data-font="sans"] .sc-msg.coach .sc-body,
+  .sc-root[data-font="sans"] .sc-q-mark{
+    font-family:'Inter',sans-serif;
+    font-style:normal;
+  }
+
   .sc-root{
     background:var(--ink);
     color:var(--text-hi);
@@ -28,6 +54,7 @@
     margin:0 auto;
     border-left:1px solid var(--line);
     border-right:1px solid var(--line);
+    transition:background 0.25s ease, color 0.25s ease;
   }
 
   /* ---- Header + Balance beam signature element ---- */
@@ -37,7 +64,7 @@
   }
   .sc-eyebrow{
     font-family:'JetBrains Mono',monospace;
-    font-size:11px;
+    font-size:0.6875em;
     letter-spacing:0.14em;
     color:var(--text-lo);
     text-transform:uppercase;
@@ -45,13 +72,13 @@
   }
   .sc-title{
     font-family:'Source Serif 4',serif;
-    font-size:26px;
+    font-size:1.625em;
     font-weight:600;
     margin:0 0 4px;
     color:var(--parchment);
   }
   .sc-sub{
-    font-size:13px;
+    font-size:0.8125em;
     color:var(--text-lo);
     margin:0 0 20px;
     line-height:1.5;
@@ -81,6 +108,54 @@
     letter-spacing:0.08em;
   }
 
+  /* ---- Toolbar: theme / font / listen controls ---- */
+  .sc-toolbar{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:16px;
+  }
+  .sc-tool-btn{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    color:var(--text-lo);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.6875em;
+    letter-spacing:0.04em;
+    padding:5px 9px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:border-color 0.15s, color 0.15s;
+    white-space:nowrap;
+  }
+  .sc-tool-btn:hover{ border-color:var(--meaning); color:var(--parchment); }
+  .sc-tool-btn.active{ border-color:var(--evidence); color:var(--evidence); }
+  .sc-tool-btn:disabled{ opacity:0.35; cursor:default; }
+  .sc-tool-btn:disabled:hover{ border-color:var(--line); color:var(--text-lo); }
+
+  .sc-font-group{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:2px;
+  }
+  .sc-font-group .sc-tool-btn{
+    background:transparent;
+    border:none;
+    padding:4px 7px;
+  }
+  .sc-font-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.6875em;
+    color:var(--text-lo);
+    width:16px;
+    text-align:center;
+  }
+
   /* ---- Starter chips ---- */
   .sc-chips{
     display:flex;
@@ -93,7 +168,7 @@
     border:1px solid var(--line);
     color:var(--text-lo);
     font-family:'Inter',sans-serif;
-    font-size:12px;
+    font-size:0.75em;
     padding:7px 12px;
     border-radius:20px;
     cursor:pointer;
@@ -121,7 +196,7 @@
     border:1px solid var(--line);
     border-radius:10px 10px 2px 10px;
     padding:11px 15px;
-    font-size:14.5px;
+    font-size:0.90625em;
     color:var(--text-hi);
   }
   .sc-msg.coach{
@@ -131,14 +206,14 @@
     font-family:'Source Serif 4',serif;
     font-style:italic;
     color:var(--meaning);
-    font-size:13px;
+    font-size:0.8125em;
     display:block;
     margin-bottom:4px;
     letter-spacing:0.02em;
   }
   .sc-msg.coach .sc-body{
     font-family:'Source Serif 4',serif;
-    font-size:17px;
+    font-size:1.0625em;
     color:var(--parchment);
     font-style:italic;
     line-height:1.6;
@@ -146,7 +221,7 @@
 
   .sc-empty{
     color:var(--text-lo);
-    font-size:13.5px;
+    font-size:0.84375em;
     line-height:1.7;
     padding-top:6px;
   }
@@ -155,7 +230,7 @@
   .sc-typing{
     align-self:flex-start;
     font-family:'JetBrains Mono',monospace;
-    font-size:11px;
+    font-size:0.6875em;
     color:var(--text-lo);
     letter-spacing:0.05em;
   }
@@ -175,7 +250,7 @@
     border-radius:8px;
     color:var(--text-hi);
     font-family:'Inter',sans-serif;
-    font-size:14px;
+    font-size:0.875em;
     padding:11px 13px;
     resize:none;
     outline:none;
@@ -185,6 +260,32 @@
   .sc-input:focus{border-color:var(--evidence);}
   .sc-input::placeholder{color:var(--text-lo);}
 
+  .sc-mic{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    color:var(--text-lo);
+    border-radius:8px;
+    width:42px;
+    height:42px;
+    flex-shrink:0;
+    cursor:pointer;
+    font-size:1.05em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .sc-mic:hover{ border-color:var(--evidence); color:var(--evidence); }
+  .sc-mic.recording{
+    background:var(--meaning);
+    color:var(--ink);
+    border-color:var(--meaning);
+    animation:sc-pulse 1.1s infinite;
+  }
+  .sc-mic:disabled{ opacity:0.35; cursor:default; }
+  .sc-mic:disabled:hover{ border-color:var(--line); color:var(--text-lo); }
+  @keyframes sc-pulse{ 0%,100%{opacity:1;} 50%{opacity:0.55;} }
+
   .sc-send{
     background:var(--meaning);
     color:var(--ink);
@@ -193,7 +294,7 @@
     padding:11px 16px;
     font-family:'Inter',sans-serif;
     font-weight:600;
-    font-size:13px;
+    font-size:0.8125em;
     cursor:pointer;
     flex-shrink:0;
   }
@@ -203,7 +304,7 @@
   .sc-foot{
     text-align:center;
     font-family:'JetBrains Mono',monospace;
-    font-size:9.5px;
+    font-size:0.59375em;
     color:var(--text-lo);
     letter-spacing:0.05em;
     padding:10px 20px 18px;
@@ -230,6 +331,17 @@
       </svg>
       <div class="sc-pole right">Meaning</div>
     </div>
+
+    <div class="sc-toolbar">
+      <button id="sc-theme-toggle" class="sc-tool-btn" title="Switch between light and dark">🌙 Dark</button>
+      <div class="sc-font-group">
+        <button id="sc-font-toggle" class="sc-tool-btn" title="Switch reading font">Aa Serif</button>
+        <button id="sc-font-dec" class="sc-tool-btn" title="Smaller text">A−</button>
+        <span id="sc-font-label" class="sc-font-label">M</span>
+        <button id="sc-font-inc" class="sc-tool-btn" title="Larger text">A+</button>
+      </div>
+      <button id="sc-listen-toggle" class="sc-tool-btn" title="Read the coach's replies aloud">🔈 Listen: Off</button>
+    </div>
   </div>
 
   <div class="sc-chips" id="sc-chips">
@@ -247,6 +359,7 @@
   </div>
 
   <div class="sc-inputbar">
+    <button id="sc-mic" class="sc-mic" title="Speak your question">🎤</button>
     <textarea id="sc-input" class="sc-input" placeholder="e.g. 'The fine-tuning argument seems to prove design...'" rows="1"></textarea>
     <button id="sc-send" class="sc-send">Ask</button>
   </div>
@@ -260,9 +373,123 @@
   const sendBtn = document.getElementById('sc-send');
   const beamG = document.getElementById('sc-beam-g');
   const emptyState = thread.querySelector('.sc-empty');
+  const scRoot = document.querySelector('.sc-root');
+
+  const themeToggle = document.getElementById('sc-theme-toggle');
+  const fontToggle = document.getElementById('sc-font-toggle');
+  const fontDec = document.getElementById('sc-font-dec');
+  const fontInc = document.getElementById('sc-font-inc');
+  const fontLabel = document.getElementById('sc-font-label');
+  const listenToggle = document.getElementById('sc-listen-toggle');
+  const micBtn = document.getElementById('sc-mic');
 
   let history = [];
   let tilt = 0; // -1 (evidence) .. +1 (meaning)
+
+  /* ---- Preferences: theme, reading font, text size, listen ---- */
+  const SIZES = ['sm','md','lg','xl'];
+  const SIZE_LABELS = { sm:'S', md:'M', lg:'L', xl:'XL' };
+
+  const prefs = {
+    theme: localStorage.getItem('sc-theme') || 'dark',
+    font: localStorage.getItem('sc-font') || 'serif',
+    size: localStorage.getItem('sc-size') || 'md',
+    listen: false
+  };
+
+  function applyPrefs(){
+    scRoot.setAttribute('data-theme', prefs.theme);
+    scRoot.setAttribute('data-fontsize', prefs.size);
+    scRoot.setAttribute('data-font', prefs.font);
+    themeToggle.textContent = prefs.theme === 'dark' ? '🌙 Dark' : '☀️ Light';
+    themeToggle.classList.toggle('active', prefs.theme === 'light');
+    fontToggle.textContent = prefs.font === 'serif' ? 'Aa Serif' : 'Aa Sans';
+    fontLabel.textContent = SIZE_LABELS[prefs.size];
+    fontDec.disabled = prefs.size === SIZES[0];
+    fontInc.disabled = prefs.size === SIZES[SIZES.length - 1];
+  }
+  applyPrefs();
+
+  themeToggle.addEventListener('click', function(){
+    prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('sc-theme', prefs.theme);
+    applyPrefs();
+  });
+
+  fontToggle.addEventListener('click', function(){
+    prefs.font = prefs.font === 'serif' ? 'sans' : 'serif';
+    localStorage.setItem('sc-font', prefs.font);
+    applyPrefs();
+  });
+
+  fontDec.addEventListener('click', function(){
+    const i = SIZES.indexOf(prefs.size);
+    if(i > 0){ prefs.size = SIZES[i-1]; localStorage.setItem('sc-size', prefs.size); applyPrefs(); }
+  });
+  fontInc.addEventListener('click', function(){
+    const i = SIZES.indexOf(prefs.size);
+    if(i < SIZES.length - 1){ prefs.size = SIZES[i+1]; localStorage.setItem('sc-size', prefs.size); applyPrefs(); }
+  });
+
+  /* ---- Listen: read coach replies aloud (Web Speech API) ---- */
+  const speechSupported = 'speechSynthesis' in window;
+  if(!speechSupported){
+    listenToggle.disabled = true;
+    listenToggle.title = 'Text-to-speech is not supported in this browser';
+    listenToggle.textContent = '🔈 Listen: N/A';
+  } else {
+    listenToggle.addEventListener('click', function(){
+      prefs.listen = !prefs.listen;
+      listenToggle.textContent = prefs.listen ? '🔊 Listen: On' : '🔈 Listen: Off';
+      listenToggle.classList.toggle('active', prefs.listen);
+      if(!prefs.listen) window.speechSynthesis.cancel();
+    });
+  }
+
+  function speak(text){
+    if(!speechSupported || !prefs.listen) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.98;
+    window.speechSynthesis.speak(utter);
+  }
+
+  /* ---- Talk: speech-to-text input (Web Speech API) ---- */
+  const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognizing = false;
+  if(SpeechRecognitionCtor){
+    const recognition = new SpeechRecognitionCtor();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(e){
+      const transcript = e.results[0][0].transcript;
+      input.value = (input.value.trim() ? input.value.trim() + ' ' : '') + transcript;
+      input.dispatchEvent(new Event('input'));
+      input.focus();
+    };
+    recognition.onend = function(){
+      recognizing = false;
+      micBtn.classList.remove('recording');
+    };
+    recognition.onerror = function(){
+      recognizing = false;
+      micBtn.classList.remove('recording');
+    };
+    micBtn.addEventListener('click', function(){
+      if(recognizing){
+        recognition.stop();
+        return;
+      }
+      recognizing = true;
+      micBtn.classList.add('recording');
+      recognition.start();
+    });
+  } else {
+    micBtn.disabled = true;
+    micBtn.title = 'Voice input is not supported in this browser';
+  }
 
   const SYSTEM_PROMPT = `You are a warm, encouraging Socratic guide for readers of "REVEALED, The Truth of the Reality of God" by Terry Whalen — a retired Air Force officer, NASA Apollo program manager, and Raytheon executive. The book argues that specific findings from science point toward a Creator, and ultimately leads readers toward the reality of God and the good news of salvation through Jesus Christ. You know the book's real content across all six of its main movements, not just a summary — draw on these specifics when relevant, in your own words, never as long quotes.
 
@@ -372,6 +599,7 @@ Rules you always follow:
       addMessage('coach', reply);
       history.push({ role: 'assistant', content: reply });
       updateBeam(reply);
+      speak(reply);
     } catch(err){
       setTyping(false);
       addMessage('coach', "⚠️ Connection error: " + err.message);
