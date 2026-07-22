@@ -16,7 +16,7 @@
 
   *{box-sizing:border-box;}
 
-  /* ---- Light theme override ---- */
+  /* ---- Light theme: warm parchment ---- */
   .sc-root[data-theme="light"]{
     --ink:#f7f3e8;
     --ink-2:#eee6d2;
@@ -26,6 +26,18 @@
     --text-hi:#1c1a13;
     --text-lo:#615c4a;
     --line:#d9d0b8;
+  }
+
+  /* ---- White theme: high-contrast black on white ---- */
+  .sc-root[data-theme="white"]{
+    --ink:#ffffff;
+    --ink-2:#f2f2f0;
+    --parchment:#111111;
+    --evidence:#1f6b63;
+    --meaning:#8a5c00;
+    --text-hi:#0a0a0a;
+    --text-lo:#4a4a4a;
+    --line:#dcdcdc;
   }
 
   /* ---- Font-size scale: everything below is in em, relative to this ---- */
@@ -50,7 +62,7 @@
     padding:0;
     display:flex;
     flex-direction:column;
-    max-width:720px;
+    max-width:900px;
     margin:0 auto;
     border-left:1px solid var(--line);
     border-right:1px solid var(--line);
@@ -134,6 +146,20 @@
   .sc-tool-btn:disabled{ opacity:0.35; cursor:default; }
   .sc-tool-btn:disabled:hover{ border-color:var(--line); color:var(--text-lo); }
 
+  .sc-theme-group{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:2px;
+  }
+  .sc-theme-group .sc-tool-btn{
+    background:transparent;
+    border:none;
+  }
+
   .sc-font-group{
     display:flex;
     align-items:center;
@@ -187,7 +213,7 @@
   }
 
   .sc-msg{
-    max-width:88%;
+    max-width:min(88%, 640px);
     line-height:1.55;
   }
   .sc-msg.user{
@@ -333,7 +359,11 @@
     </div>
 
     <div class="sc-toolbar">
-      <button id="sc-theme-toggle" class="sc-tool-btn" title="Switch between light and dark">🌙 Dark</button>
+      <div class="sc-theme-group">
+        <button class="sc-tool-btn" data-theme-choice="black" title="Black theme">Black</button>
+        <button class="sc-tool-btn" data-theme-choice="light" title="Light parchment theme">Light</button>
+        <button class="sc-tool-btn" data-theme-choice="white" title="White theme">White</button>
+      </div>
       <div class="sc-font-group">
         <button id="sc-font-toggle" class="sc-tool-btn" title="Switch reading font">Aa Serif</button>
         <button id="sc-font-dec" class="sc-tool-btn" title="Smaller text">A−</button>
@@ -375,7 +405,7 @@
   const emptyState = thread.querySelector('.sc-empty');
   const scRoot = document.querySelector('.sc-root');
 
-  const themeToggle = document.getElementById('sc-theme-toggle');
+  const themeButtons = document.querySelectorAll('[data-theme-choice]');
   const fontToggle = document.getElementById('sc-font-toggle');
   const fontDec = document.getElementById('sc-font-dec');
   const fontInc = document.getElementById('sc-font-inc');
@@ -391,7 +421,7 @@
   const SIZE_LABELS = { sm:'S', md:'M', lg:'L', xl:'XL' };
 
   const prefs = {
-    theme: localStorage.getItem('sc-theme') || 'dark',
+    theme: localStorage.getItem('sc-theme') || 'black',
     font: localStorage.getItem('sc-font') || 'serif',
     size: localStorage.getItem('sc-size') || 'md',
     listen: false
@@ -401,8 +431,9 @@
     scRoot.setAttribute('data-theme', prefs.theme);
     scRoot.setAttribute('data-fontsize', prefs.size);
     scRoot.setAttribute('data-font', prefs.font);
-    themeToggle.textContent = prefs.theme === 'dark' ? '🌙 Dark' : '☀️ Light';
-    themeToggle.classList.toggle('active', prefs.theme === 'light');
+    themeButtons.forEach(function(b){
+      b.classList.toggle('active', b.dataset.themeChoice === prefs.theme);
+    });
     fontToggle.textContent = prefs.font === 'serif' ? 'Aa Serif' : 'Aa Sans';
     fontLabel.textContent = SIZE_LABELS[prefs.size];
     fontDec.disabled = prefs.size === SIZES[0];
@@ -410,10 +441,12 @@
   }
   applyPrefs();
 
-  themeToggle.addEventListener('click', function(){
-    prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('sc-theme', prefs.theme);
-    applyPrefs();
+  themeButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      prefs.theme = btn.dataset.themeChoice;
+      localStorage.setItem('sc-theme', prefs.theme);
+      applyPrefs();
+    });
   });
 
   fontToggle.addEventListener('click', function(){
